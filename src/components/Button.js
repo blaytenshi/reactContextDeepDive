@@ -1,16 +1,24 @@
 import React from 'react';
 import LanguageContext from '../contexts/LanguageContext';
+import ColorContext from '../contexts/ColorContext';
 
 class Button extends React.Component {
-  // contextType is a special property. Must be spelled this way and must be set to equal to the ContextComponent we just created
-  // static assigns the contextType property to the Button class itself
-  // You can declare Button.contextType = LanguageContext if you prefer to have it outside of the class
-  static contextType = LanguageContext;
+  renderSubmit(value) {
+    return value === 'english' ? 'Submit' : 'Voorleggen';
+  }
 
   render() {
-    console.log(this.context);
-    const text = this.context === 'english' ? 'Submit' : 'Voorleggen';
-    return <button className="ui button primary">{text}</button>;
+    return (
+      <ColorContext.Consumer>
+        {color => {
+          <button className={`ui button ${color}`}>
+            <LanguageContext.Consumer>
+              {value => this.renderSubmit(value)}
+            </LanguageContext.Consumer>
+          </button>;
+        }}
+      </ColorContext.Consumer>
+    );
   }
 }
 
